@@ -1,136 +1,66 @@
-# 🚀 Montenegro Expense Tracker (RET System)
+# (RET) System
 
-```{=html}
-<p align="center">
-```
-`<b>`{=html}AI-Powered Expense Tracking • Microservices Architecture •
-Real-World Problem Solving`</b>`{=html}
-```{=html}
-</p>
-```
-```{=html}
-<p align="center">
-```
-`<img src="https://img.shields.io/badge/Backend-Spring_Boot_3-green" />`{=html}
-`<img src="https://img.shields.io/badge/Mobile-React_Native-blue" />`{=html}
-`<img src="https://img.shields.io/badge/AI-Llama_3-orange" />`{=html}
-`<img src="https://img.shields.io/badge/DevOps-Docker-black" />`{=html}
-`<img src="https://img.shields.io/badge/CI/CD-GitHub_Actions-purple" />`{=html}
-```{=html}
-</p>
-```
+Welcome to the **RET System** organization. This project is NOT LIKE other EXPENSE TRACKING APPLICATIONS, this is a complete, automated end-to-end AI expense-tracking platform. I architected and built this microservice system from the ground up to solve a real-world problem: the tedious nature of manual personal finance tracking.
 
-------------------------------------------------------------------------
-
-🎥 **Demo Video (Coming Soon)**\
+🎥 **Demo Video (Coming Soon)**
 👉 *\[PLACE YOUR YOUTUBE LINK HERE\]*
 
-------------------------------------------------------------------------
+---
 
-## ⚡ What Makes This Project Stand Out
+## 🌟 The Problem & The Solution
 
--   🧠 **AI-powered receipt understanding** (no hardcoded logic)\
--   🔐 **Bypasses real-world government WAF protection**\
--   🏗️ **Production-grade microservices architecture**\
--   📱 **Fully functional mobile app (QR scanning + dashboard)**\
--   🚀 **Automated CI/CD + VPS deployment**
+**The Problem:**
+In Montenegro, every store receipt contains a QR code that links to a government tax portal confirming the receipt. However, keeping track of how much you spend every month and on exactly what items is incredibly tedious if you have to manually enter everything into an app or a spreadsheet.
 
-👉 This is not a tutorial project --- it's a **real system solving a
-real problem end-to-end**.
+**The Solution:**
+The RET System is an automated expense-tracking mobile app. 
 
-------------------------------------------------------------------------
+1. **Scan:** You scan the QR code on your receipt using the mobile app's camera.
+2. **Scrape:** The system instantly scrapes the raw receipt data directly from the Montenegrin government's heavily protected database.
+3. **Analyze:** Artificial Intelligence (Groq Llama-3) reads every individual item (e.g., "Milk", "Bread", "T-Shirt") and automatically categorizes them based on your own custom categories that you can create inside mobile app (e.g., *Groceries*, *Clothing*).
+4. **Visualize:** The app calculates everything and builds beautiful, interactive charts, showing you exactly how much you spent this month on each category.
 
-## 🌟 For Non-Technical People: What is this?
+---
 
-### ❗ The Problem
+## 💻 Technical Architecture & Repositories
 
-Tracking expenses is annoying.
+The RET System is not a monolith; it is a distributed microservice architecture consisting of three distinct codebases working together seamlessly.
 
-Even though receipts in Montenegro contain QR codes linked to official
-data: - you still have to manually enter everything\
-- it takes time\
-- most people give up
+### [1. Mobile Frontend (`ret-mobile`)](https://github.com/your-org/ret-mobile)
+*   **Built With:** React Native, Expo (SDK 55), TypeScript.
+*   **Role:** The cross-platform user interface. It acts as a QR code scanner and interactive dashboard. It uses aggressive state-management for instant UI updates during CRUD operations.
 
-------------------------------------------------------------------------
+### [2. Core Backend (`ret-backend`)](https://github.com/your-org/ret-backend)
+*   **Built With:** Java 21, Spring Boot 3, PostgreSQL, Hibernate ORM.
+*   **Role:** The brain and database manager. It handles all RESTful CRUD operations, applies cascade-deletes for data integrity, and coordinates the transaction flow between the mobile app and the AI worker.
 
-### ✅ The Solution
+### [3. AI & Scraping Worker (`ret-worker`)](https://github.com/your-org/ret-worker)
+*   **Built With:** Python 3.12, FastAPI, Groq SDK, `curl_cffi`.
+*   **Role:** The heavy lifter. It physically bypasses the government's Web Application Firewall (WAF) to extract receipt JSON, and then utilizes the Llama-3-70b LLM to process and format the scraped data.
 
-This app removes all manual work.
+---
 
-1.  📷 Scan receipt QR code\
-2.  🌐 Data is pulled automatically\
-3.  🧠 AI understands and categorizes items\
-4.  📊 You instantly see spending insights
+## 🧠 Technical Achievements & Problem Solving
 
-👉 It turns a **10-minute task into a 2-second action**.
+This system demonstrates my ability to design, build, and deploy a complete microservice architecture spanning frontend UI, backend data integrity, AI integration, and DevOps.
 
-------------------------------------------------------------------------
+*   **Reverse-Engineering (WAF Bypass):** The Montenegrin Tax API is protected heavily by an F5 BIG-IP Firewall that aggressively blocks standard HTTP clients. I built the Python microservice utilizing `curl_cffi` to mimic Chrome TLS/JA3 fingerprints. This successfully bypassed the firewall, completed the complex cookie-handshakes, and extracted the raw JSON.
+*   **Dynamic AI Integration:** Hardcoding category mapping was impossible due to the infinite variety of potential items in the Montenegrin language. I integrated the **Groq API (Llama-3)**. Instead of giving the AI hardcoded categories, the Spring Boot backend *dynamically* feeds the AI the user's custom database categories, effectively acting as an intelligent formatting engine.
+*   **DevOps, Docker, & CI/CD Pipelines:** I containerized the entire architecture using **Docker** and successfully self-hosted it on a remote Linux VPS using **Docker Compose**. I engineered a CI/CD pipeline using **GitHub Actions**. Whenever a new commit is pushed to the main branch, the pipeline automatically pulls the latest code to the VPS and conducts a zero-downtime rolling restart of the Docker containers.
+*   **Security Lock-down:** The database and internal APIs are strictly locked down. All communication from the Mobile App to Spring Boot demands a custom `MOBILE_API_KEY` validated by a Servlet Filter. Furthermore, the Python Worker is not publicly accessible; it requires an `INTERNAL_API_KEY` so only the Spring Boot backend can utilize its scraping and AI generation capabilities.
 
-## 💻 For Technical People: Architecture
+---
 
-This system is built as a **3-service microarchitecture**:
+## 🔄 The Scanning Flow (End-to-End)
 
-### 📱 Mobile (`ret-mobile`)
+When a user points their phone camera at a receipt QR code, here is exactly what happens under the hood:
 
--   React Native + Expo\
--   QR scanning + dashboard
+1. **Mobile App** reads the URL: `https://mapr.tax.gov.me/ic/#?iic=XYZ...` and sends a `POST` request to the **Spring Boot Backend**.
+2. **Spring Boot** extracts the tracking numbers and checks PostgreSQL to see if the receipt was already cached. If not, it forwards the request to the **Python Worker**.
+3. **Python Worker** bypasses the government firewall, downloads the raw receipt data securely, and strips out the headers.
+4. **Python Worker** feeds the list of purchased items to the **Groq AI model**. Spring Boot dynamically provides the AI with the *custom categories straight from the database*. 
+5. **Python Worker** returns the intelligently categorized receipt back to **Spring Boot**.
+6. **Spring Boot** maps the JSON into Java Entities, saves everything to PostgreSQL, and returns the final data.
+7. **Mobile App** refreshes the dashboard and the user sees their updated spending analytics.
 
-### ⚙️ Backend (`ret-backend`)
-
--   Java 21 + Spring Boot\
--   PostgreSQL + Hibernate\
--   API orchestration
-
-### 🤖 Worker (`ret-worker`)
-
--   Python + FastAPI\
--   curl_cffi (WAF bypass)\
--   Groq LLM (Llama 3)
-
-------------------------------------------------------------------------
-
-## 🔄 End-to-End Flow
-
-1.  Scan QR\
-2.  Backend receives request\
-3.  Worker scrapes receipt (bypassing WAF)\
-4.  AI categorizes items dynamically\
-5.  Backend stores data\
-6.  Mobile updates instantly
-
-------------------------------------------------------------------------
-
-## 🧠 Why This Is Interesting (Engineering Perspective)
-
--   Reverse-engineered protected external system\
--   AI used **dynamically**, not hardcoded\
--   Clean separation of services\
--   Handles real-world constraints (security, anti-bot systems)\
--   Fully deployable and automated
-
-------------------------------------------------------------------------
-
-## 🛠️ Tech Stack
-
-**Frontend:** React Native, Expo\
-**Backend:** Spring Boot, PostgreSQL\
-**AI Worker:** FastAPI, Llama 3\
-**DevOps:** Docker, GitHub Actions, VPS
-
-------------------------------------------------------------------------
-
-## 🎯 What This Demonstrates
-
--   Full-stack ownership\
--   System design thinking\
--   Real-world problem solving\
--   Production deployment experience
-
-------------------------------------------------------------------------
-
-## 📌 For Recruiters
-
-This project showcases my ability to: - design scalable systems\
-- integrate AI into real applications\
-- solve complex engineering problems\
-- ship production-ready software
+---
