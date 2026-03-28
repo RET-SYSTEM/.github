@@ -1,6 +1,6 @@
 # (RET) System
 
-Welcome to the **RET System** organization. This project is NOT LIKE other EXPENSE TRACKING APPLICATIONS, this is a complete, automated end-to-end AI expense-tracking platform. I architected and built this microservice system from the ground up to solve a real-world problem: the tedious nature of manual personal finance tracking.
+Welcome to the **RET System**. This project is NOT LIKE other EXPENSE TRACKING APPLICATIONS, this is a complete, automated end-to-end AI expense-tracking platform, without the need for any manual entry of your spendings. I architected and built this system from the ground up to solve a real-world problem: the tedious nature of manual personal finance tracking.
 
 🎥 **Demo Video (Coming Soon)**
 👉 *\[PLACE YOUR YOUTUBE LINK HERE\]*
@@ -10,15 +10,15 @@ Welcome to the **RET System** organization. This project is NOT LIKE other EXPEN
 ## 🌟 The Problem & The Solution
 
 **The Problem:**
-In Montenegro, every store receipt contains a QR code that links to a government tax portal confirming the receipt. However, keeping track of how much you spend every month and on exactly what items is incredibly tedious if you have to manually enter everything into an app or a spreadsheet.
+Keeping track of how much you spend every month and on exactly what items is incredibly tedious if you have to manually enter everything into an app or a spreadsheet.
 
 **The Solution:**
-The RET System is an automated expense-tracking mobile app. 
+In Montenegro, every store receipt contains a QR code that links to a government tax portal confirming the receipt, showing total price and items purchased. The RET System utilizes that data and automatically enters the data into the app once you scan the receipt QR code. 
 
 1. **Scan:** You scan the QR code on your receipt using the mobile app's camera.
-2. **Scrape:** The system instantly scrapes the raw receipt data directly from the Montenegrin government's heavily protected database.
+2. **Scrape:** The system instantly scrapes the raw receipt data directly from the tax portal.
 3. **Analyze:** Artificial Intelligence (Groq Llama-3) reads every individual item (e.g., "Milk", "Bread", "T-Shirt") and automatically categorizes them based on your own custom categories that you can create inside mobile app (e.g., *Groceries*, *Clothing*).
-4. **Visualize:** The app calculates everything and builds beautiful, interactive charts, showing you exactly how much you spent this month on each category.
+4. **Visualize:** The app calculates everything and builds beautiful, interactive charts, showing you exactly how much you spent.
 
 ---
 
@@ -35,8 +35,8 @@ The RET System is not a monolith; it is a distributed microservice architecture 
 *   **Role:** The brain and database manager. It handles all RESTful CRUD operations, applies cascade-deletes for data integrity, and coordinates the transaction flow between the mobile app and the AI worker.
 
 ### [3. AI & Scraping Worker (`ret-worker`)](https://github.com/your-org/ret-worker)
-*   **Built With:** Python 3.12, FastAPI, Groq SDK, `curl_cffi`.
-*   **Role:** The heavy lifter. It physically bypasses the government's Web Application Firewall (WAF) to extract receipt JSON, and then utilizes the Llama-3-70b LLM to process and format the scraped data.
+*   **Built With:** Python 3.12, FastAPI
+*   **Role:** The heavy lifter. It extracts receipt JSON from the tax portal, and then utilizes the Llama-3-70b LLM to process and format the scraped data.
 
 ---
 
