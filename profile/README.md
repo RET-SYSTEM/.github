@@ -40,27 +40,15 @@ The RET System is not a monolith; it is a distributed microservice architecture 
 
 ---
 
-## 🧠 Technical Achievements & Problem Solving
-
-This system demonstrates my ability to design, build, and deploy a complete microservice architecture spanning frontend UI, backend data integrity, AI integration, and DevOps.
-
-*   **Reverse-Engineering (WAF Bypass):** The Montenegrin Tax API is protected heavily by an F5 BIG-IP Firewall that aggressively blocks standard HTTP clients. I built the Python microservice utilizing `curl_cffi` to mimic Chrome TLS/JA3 fingerprints. This successfully bypassed the firewall, completed the complex cookie-handshakes, and extracted the raw JSON.
-*   **Dynamic AI Integration:** Hardcoding category mapping was impossible due to the infinite variety of potential items in the Montenegrin language. I integrated the **Groq API (Llama-3)**. Instead of giving the AI hardcoded categories, the Spring Boot backend *dynamically* feeds the AI the user's custom database categories, effectively acting as an intelligent formatting engine.
-*   **DevOps, Docker, & CI/CD Pipelines:** I containerized the entire architecture using **Docker** and successfully self-hosted it on a remote Linux VPS using **Docker Compose**. I engineered a CI/CD pipeline using **GitHub Actions**. Whenever a new commit is pushed to the main branch, the pipeline automatically pulls the latest code to the VPS and conducts a zero-downtime rolling restart of the Docker containers.
-*   **Security Lock-down:** The database and internal APIs are strictly locked down. All communication from the Mobile App to Spring Boot demands a custom `MOBILE_API_KEY` validated by a Servlet Filter. Furthermore, the Python Worker is not publicly accessible; it requires an `INTERNAL_API_KEY` so only the Spring Boot backend can utilize its scraping and AI generation capabilities.
-
----
-
 ## 🔄 The Scanning Flow (End-to-End)
 
 When a user points their phone camera at a receipt QR code, here is exactly what happens under the hood:
 
 1. **Mobile App** reads the URL: `https://mapr.tax.gov.me/ic/#?iic=XYZ...` and sends a `POST` request to the **Spring Boot Backend**.
-2. **Spring Boot** extracts the tracking numbers and checks PostgreSQL to see if the receipt was already cached. If not, it forwards the request to the **Python Worker**.
-3. **Python Worker** bypasses the government firewall, downloads the raw receipt data securely, and strips out the headers.
-4. **Python Worker** feeds the list of purchased items to the **Groq AI model**. Spring Boot dynamically provides the AI with the *custom categories straight from the database*. 
+2. **Spring Boot** extracts the tracking numbers and checks database to see if the receipt was already scanned. If not, it forwards the request to the **Python Worker**.
+3. **Python Worker** scrapes the raw receipt data from tax portal, feeds the list of purchased items to the **Groq AI model**. Spring Boot dynamically provides the AI with the *custom categories straight from the database,* making customizable categories possible. 
 5. **Python Worker** returns the intelligently categorized receipt back to **Spring Boot**.
-6. **Spring Boot** maps the JSON into Java Entities, saves everything to PostgreSQL, and returns the final data.
+6. **Spring Boot** maps the JSON into Java Entities, saves everything to PostgreSQL database, and returns the final data.
 7. **Mobile App** refreshes the dashboard and the user sees their updated spending analytics.
 
 ---
