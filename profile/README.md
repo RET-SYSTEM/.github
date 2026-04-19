@@ -22,7 +22,7 @@ Instead of typing every purchase into an app, the user simply scans the QR code 
 ![AI report screenshot](ADD_SCREENSHOT_LINK_HERE)
 
 ### Architecture Diagram
-![System architecture diagram](ADD_DIAGRAM_LINK_HERE)
+![System architecture diagram](https://i.imgur.com/iyYpjDc.png)
 
 ---
 
