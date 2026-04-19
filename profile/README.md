@@ -12,15 +12,6 @@ Instead of typing every purchase into an app, the user simply scans the QR code 
 
 ---
 
-## Screenshots
-
-### Mobile App
-![Dashboard screenshot](ADD_SCREENSHOT_LINK_HERE)
-
-![Receipt history screenshot](ADD_SCREENSHOT_LINK_HERE)
-
-![AI report screenshot](ADD_SCREENSHOT_LINK_HERE)
-
 ### Architecture Diagram
 ![System architecture diagram](https://i.imgur.com/iyYpjDc.png)
 
