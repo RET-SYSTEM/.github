@@ -17,7 +17,7 @@ In Montenegro, every store receipt contains a QR code that links to a government
 
 1. **Scan:** You scan the QR code on your receipt using the mobile app's camera.
 2. **Scrape:** The system instantly scrapes the raw receipt data directly from the tax portal.
-3. **Analyze:** Artificial Intelligence (Groq Llama-3) reads every individual item (e.g., "Milk", "Bread", "T-Shirt") and automatically categorizes them based on your own custom categories that you can create inside mobile app (e.g., *Groceries*, *Clothing*).
+3. **Analyze:** Artificial Intelligence (open-mistral-nemo) reads every individual item (e.g., "Milk", "Bread", "T-Shirt") and automatically categorizes them based on your own custom categories that you can create inside mobile app (e.g., *Groceries*, *Clothing*).
 4. **Visualize:** The app calculates everything and builds beautiful, interactive charts, showing you exactly how much you spent.
 
 ---
@@ -46,7 +46,7 @@ When a user points their phone camera at a receipt QR code, here is exactly what
 
 1. **Mobile App** reads the URL: `https://mapr.tax.gov.me/ic/#?iic=XYZ...` and sends a `POST` request to the **Spring Boot Backend**.
 2. **Spring Boot** extracts the tracking numbers and checks database to see if the receipt was already scanned. If not, it forwards the request to the **Python Worker**.
-3. **Python Worker** scrapes the raw receipt data from tax portal, feeds the list of purchased items to the **Groq AI model**. Spring Boot dynamically provides the AI with the *custom categories straight from the database,* making customizable categories possible. 
+3. **Python Worker** scrapes the raw receipt data from tax portal, feeds the list of purchased items to the **Mistral's AI model**. Spring Boot dynamically provides the AI with the *custom categories straight from the database,* making customizable categories possible. 
 5. **Python Worker** returns the intelligently categorized receipt back to **Spring Boot**.
 6. **Spring Boot** maps the JSON into Java Entities, saves everything to PostgreSQL database, and returns the final data.
 7. **Mobile App** refreshes the dashboard and the user sees their updated spending analytics.
