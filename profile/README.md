@@ -31,12 +31,12 @@ The RET System is not a monolith; it is a distributed microservice architecture 
 *   **Role:** The cross-platform user interface. It acts as a QR code scanner and interactive dashboard. It uses aggressive state-management for instant UI updates during CRUD operations.
 
 ### [2. Core Backend (`ret-backend`)](https://github.com/your-org/ret-backend)
-*   **Built With:** Java 21, Spring Boot 3, PostgreSQL, Hibernate ORM.
+*   **Built With:** Java 17, Spring Boot 3, PostgreSQL, Hibernate ORM.
 *   **Role:** The brain and database manager. It handles all RESTful CRUD operations, applies cascade-deletes for data integrity, and coordinates the transaction flow between the mobile app and the AI worker.
 
 ### [3. AI & Scraping Worker (`ret-worker`)](https://github.com/your-org/ret-worker)
 *   **Built With:** Python 3.12, FastAPI
-*   **Role:** The heavy lifter. It extracts receipt JSON from the tax portal, and then utilizes the Llama-3-70b LLM to process and format the scraped data.
+*   **Role:** The heavy lifter. It extracts receipt JSON from the tax portal, and then utilizes the Mistral's open-mistral-nemo LLM to process and format the scraped data.
 
 ---
 
