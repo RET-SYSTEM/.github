@@ -8,7 +8,7 @@ Instead of typing every purchase into an app, the user simply scans the QR code 
 
 ## Demo
 🎥 **Demo Video**  
-[Add YouTube link here]
+![Add YouTube link here](https://www.youtube.com/shorts/XydU75vXJJo)
 
 ---
 
