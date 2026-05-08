@@ -1,5 +1,6 @@
-# RET System
-
+<p align="center">
+  <img src="baner.png" alt="Banner" width="100%">
+</p>
 **RET System** is an AI-powered expense tracking application that removes the need for manual expense entry.
 
 Instead of typing every purchase into an app, the user simply scans the QR code printed on a fiscal receipt. The system then retrieves the receipt data from Montenegrin government tax portal, extracts purchased items, categorizes them with AI, stores everything in a database, and displays the results in a mobile app through statistics, charts, and AI-generated reports.
